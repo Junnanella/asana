@@ -35,9 +35,23 @@ export function activate(context: vscode.ExtensionContext) {
     return match[1];
   };
 
+  interface Task {
+    name: string;
+    description: string;
+    url: string;
+  }
+
+  const getAsanaTaskDetails = async (taskId: string): Promise<Task> => {
+    return {
+      name: "Task Name",
+      description: "Task Description",
+      url: `https://app.asana.com/0/${taskId}/${taskId}/f`,
+    };
+  };
+
   const hoverProvider: vscode.HoverProvider = {
     // TODO: Support multiple URLs in one line later
-    provideHover(document, position, token) {
+    async provideHover(document, position, token) {
       const line = document.lineAt(position.line);
       const match = line.text.match(regex);
 
@@ -50,18 +64,22 @@ export function activate(context: vscode.ExtensionContext) {
       const lengthOfAsanaLink = match[0].length;
 
       // Link does appear, but I'm not hovering over it
-      if (position.character < asanaLinkIndex || position.character > asanaLinkIndex + lengthOfAsanaLink) {
+      if (
+        position.character < asanaLinkIndex ||
+        position.character > asanaLinkIndex + lengthOfAsanaLink
+      ) {
         return;
       }
 
       const taskId = getAsanaTaskId(line.text);
+      const task = await getAsanaTaskDetails(taskId);
 
-      return new vscode.Hover(`The Asana Task ID is ${taskId}`);
+      return new vscode.Hover([task.name, task.description]);
     },
   };
 
   const disposableHoverProvider = vscode.languages.registerHoverProvider(
-    [{ scheme: "file" }, {scheme: "untitled"}],
+    [{ scheme: "file" }, { scheme: "untitled" }],
     hoverProvider
   );
 

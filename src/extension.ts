@@ -61,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const disposableHoverProvider = vscode.languages.registerHoverProvider(
-    { scheme: "file" },
+    [{ scheme: "file" }, {scheme: "untitled"}],
     hoverProvider
   );
 

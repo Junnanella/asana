@@ -18,13 +18,10 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage("Hello World from Asana!");
   });
 
-  // https://asana.com/123/456 <= If we see this, show a tooltip with the task name (make an API call)
-
-  // To get a tooltip extension, you need to do this:
-  // https://stackoverflow.com/questions/54792391/vs-code-hover-extension-implement-hoverprovider
-
   const hoverProvider: vscode.HoverProvider = {
     provideHover(document, position, token) {
+      // TODO:
+      // https://asana.com/123/456 <= If we see this, show a tooltip with the task name (make an API call)
       const range = document.getWordRangeAtPosition(position);
       const word = document.getText(range);
 

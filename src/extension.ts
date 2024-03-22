@@ -38,9 +38,12 @@ export function activate(context: vscode.ExtensionContext) {
     },
   };
 
-  vscode.languages.registerHoverProvider({ scheme: "file" }, hoverProvider);
+  const disposableHoverProvider = vscode.languages.registerHoverProvider(
+    { scheme: "file" },
+    hoverProvider
+  );
 
-  context.subscriptions.push(disposable);
+  context.subscriptions.push(disposable, disposableHoverProvider);
 }
 
 // This method is called when your extension is deactivated

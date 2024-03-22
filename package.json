@@ -19,7 +19,17 @@
         "command": "asana.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Asana",
+      "properties": {
+        "asana.personalAccessToken": {
+          "type": "string",
+          "default": "",
+          "description": "Personal access token"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

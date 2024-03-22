@@ -4,10 +4,35 @@ import * as vscode from "vscode";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "asana" is now active!');
+export async function activate(context: vscode.ExtensionContext) {
+  const config = vscode.workspace.getConfiguration();
+  const existingApiToken = await config.get("asana.personalAccessToken");
+
+  if (!existingApiToken) {
+    const setupApiKeyAction = "Complete Asana extension setup";
+    const response = await vscode.window.showWarningMessage(
+      "The Asana link extension requires setting up an [Personal Access Token](https://app.asana.com/0/my-apps). Click the button below to set it up.",
+      setupApiKeyAction
+    );
+    const userWantsToSetupKey = response === setupApiKeyAction;
+
+    if (userWantsToSetupKey) {
+      const asanaApiToken = await vscode.window.showInputBox({
+        title:
+          "Go to https://app.asana.com/0/my-apps to create a 'Personal access token'",
+        placeHolder:
+          "Paste your 'Personal access token' here. It looks like '...'",
+      });
+
+      if (asanaApiToken) {
+        await config.update(
+          "asana.personalAccessToken",
+          asanaApiToken,
+          vscode.ConfigurationTarget.Global
+        );
+      }
+    }
+  }
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand

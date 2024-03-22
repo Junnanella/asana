@@ -18,6 +18,11 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage("Hello World from Asana!");
   });
 
+  const isAsanaLink = (text: string): boolean => {
+    // If not an actual Asana link, then return false
+    return text.toLocaleLowerCase().includes("asana");
+  };
+
   const hoverProvider: vscode.HoverProvider = {
     provideHover(document, position, token) {
       // TODO:
@@ -25,9 +30,11 @@ export function activate(context: vscode.ExtensionContext) {
       const range = document.getWordRangeAtPosition(position);
       const word = document.getText(range);
 
-      return new vscode.Hover(
-        `Hello from Asana! You are hovering over ${word}`
-      );
+      if (isAsanaLink(word)) {
+        return new vscode.Hover(
+          `Hello from Asana! You are hovering over ${word}`
+        );
+      }
     },
   };
 

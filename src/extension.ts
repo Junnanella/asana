@@ -74,7 +74,9 @@ export function activate(context: vscode.ExtensionContext) {
       const taskId = getAsanaTaskId(line.text);
       const task = await getAsanaTaskDetails(taskId);
 
-      return new vscode.Hover([task.name, task.description]);
+      const boldTaskNameLink = `[**${task.name}**](${task.url})`;
+
+      return new vscode.Hover([boldTaskNameLink, task.description]);
     },
   };
 

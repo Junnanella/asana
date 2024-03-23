@@ -29,25 +29,49 @@ export interface Task {
   permalink_url: string;
 }
 
+const storedAsanaTaskDetails: { [taskId: string]: Task } = {};
+
+const getOrFetchTask = async (
+  taskId: string,
+  fetchTask: () => Promise<Task>
+): Promise<Task> => {
+  const existingTask = getStoredAsanaTaskDetails(taskId);
+  if (existingTask) {
+    return existingTask;
+  }
+
+  const task = await fetchTask();
+
+  setStoredAsanaTaskDetails(taskId, task);
+  return task;
+};
+
+const getStoredAsanaTaskDetails = (taskId: string): Task | null => {
+  return storedAsanaTaskDetails[taskId] ?? null;
+};
+
+const setStoredAsanaTaskDetails = (taskId: string, data: Task): void => {
+  storedAsanaTaskDetails[taskId] = data;
+};
+
 export const getAsanaTaskDetails = async (
   taskId: string,
   apiToken: string
 ): Promise<Task> => {
-  // TODO: Actually fetch the Task with the API + API key
+  return getOrFetchTask(taskId, async () => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        authorization: `Bearer ${apiToken}`,
+      },
+    };
 
-  const options = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      authorization: `Bearer ${apiToken}`,
-    },
-  };
-
-  const response = await fetch(
-    `https://app.asana.com/api/1.0/tasks/${taskId}`,
-    options
-  );
-  const json = (await response.json()) as { data: Task };
-
-  return json.data;
+    const response = await fetch(
+      `https://app.asana.com/api/1.0/tasks/${taskId}`,
+      options
+    );
+    const { data: task } = (await response.json()) as { data: Task };
+    return task;
+  });
 };

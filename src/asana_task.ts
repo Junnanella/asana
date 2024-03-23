@@ -33,31 +33,26 @@ const storedAsanaTaskDetails: { [taskId: string]: Task } = {};
 
 const getOrFetchTask = async (
   taskId: string,
-  fetchTask: () => Promise<Task>
-): Promise<Task> => {
-  const existingTask = getStoredAsanaTaskDetails(taskId);
+  fetchTask: () => Promise<Task | null>
+): Promise<Task | null> => {
+  const existingTask = storedAsanaTaskDetails[taskId] ?? null;
   if (existingTask) {
     return existingTask;
   }
 
   const task = await fetchTask();
+  if (!task) {
+    return null;
+  }
 
-  setStoredAsanaTaskDetails(taskId, task);
+  storedAsanaTaskDetails[taskId] = task;
   return task;
-};
-
-const getStoredAsanaTaskDetails = (taskId: string): Task | null => {
-  return storedAsanaTaskDetails[taskId] ?? null;
-};
-
-const setStoredAsanaTaskDetails = (taskId: string, data: Task): void => {
-  storedAsanaTaskDetails[taskId] = data;
 };
 
 export const getAsanaTaskDetails = async (
   taskId: string,
   apiToken: string
-): Promise<Task> => {
+): Promise<Task | null> => {
   return getOrFetchTask(taskId, async () => {
     const options = {
       method: "GET",
@@ -71,6 +66,11 @@ export const getAsanaTaskDetails = async (
       `https://app.asana.com/api/1.0/tasks/${taskId}`,
       options
     );
+
+    if (!response.ok) {
+      return null;
+    }
+
     const { data: task } = (await response.json()) as { data: Task };
     return task;
   });

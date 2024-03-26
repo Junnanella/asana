@@ -3,7 +3,7 @@
   "displayName": "Asana task tooltips",
   "description": "Hover to view Asana task",
   "icon": "assets/images/asana_tooltip_icon_filled.png",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "junellacaringal",
   "engines": {
     "vscode": "^1.87.0"

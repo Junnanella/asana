@@ -41,6 +41,11 @@ export async function activate(context: vscode.ExtensionContext) {
       const taskId = getAsanaTaskId(line.text);
       const task = await getAsanaTaskDetails(taskId, existingApiToken);
 
+      // If for some reason we fail to grab details, just don't show anything for now
+      if (!task) {
+        return;
+      }
+
       const boldTaskNameLink = `[**${task.name}**](${task.permalink_url})`;
 
       return new vscode.Hover([boldTaskNameLink, task.assignee?.name ?? "Unassigned", task.notes]);

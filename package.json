@@ -3,7 +3,7 @@
   "displayName": "Asana task tooltips",
   "description": "Preview Asana task details when you hover over an Asana link",
   "icon": "assets/images/asana_tooltip_icon_filled.png",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "publisher": "junellacaringal",
   "engines": {
     "vscode": "^1.87.0"

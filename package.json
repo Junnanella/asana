@@ -6,6 +6,9 @@
   "engines": {
     "vscode": "^1.87.0"
   },
+  "repository": {
+    "url": "https://github.com/Junnanella/asana-vscode-tooltip"
+  },
   "categories": [
     "Other"
   ],

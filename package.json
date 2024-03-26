@@ -1,7 +1,7 @@
 {
-  "name": "asana",
-  "displayName": "Asana",
-  "description": "todo",
+  "name": "asana-vscode-tooltip",
+  "displayName": "Asana task tooltips",
+  "description": "Preview Asana task details when you hover over an Asana link",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.87.0"

@@ -1,7 +1,7 @@
 {
   "name": "asana-vscode-tooltip",
   "displayName": "Asana task tooltips",
-  "description": "Preview Asana task details when you hover over an Asana link",
+  "description": "Hover to view Asana task",
   "icon": "assets/images/asana_tooltip_icon_filled.png",
   "version": "1.0.0",
   "publisher": "junellacaringal",
